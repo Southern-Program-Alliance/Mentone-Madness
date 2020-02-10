@@ -18,7 +18,7 @@ MonoBehaviour:
   X: 0
   Y: 0
   Z: 0
-  portraitImage: {fileID: 0}
+  portraitImage: {fileID: 21300000, guid: a3ae1a1bc5bf39f4cba31132074517fc, type: 3}
   fullImage: {fileID: 0}
   collectibleImage: {fileID: 0}
   characterName: 
