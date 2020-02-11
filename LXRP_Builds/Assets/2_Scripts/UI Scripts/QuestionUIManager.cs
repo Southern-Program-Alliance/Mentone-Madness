@@ -1,7 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿//using System.Collections;
+//using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+//using UnityEngine.UI;
 using TMPro;
 
 public class QuestionUIManager : MonoBehaviour
@@ -16,7 +16,7 @@ public class QuestionUIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI scenarioText = null;
     [SerializeField] TextMeshProUGUI scenarioNumberText = null;
     [SerializeField] int activeQuestionIndex = 0;
-    [SerializeField] int numberOfQuestionsAnswered = 0;
+    [SerializeField] public int numberOfQuestionsAnswered = 0;
     private SO_QuestionInfo currentQuestion = null;
     [SerializeField] TextMeshProUGUI aOption;
     [SerializeField] TextMeshProUGUI bOption;
@@ -78,9 +78,15 @@ public class QuestionUIManager : MonoBehaviour
     public void OnQuestionButtonClicked(char inButtonLetter)
     {
         if (currentQuestion.answer == inButtonLetter)
+        {
             DisplayCorrectText(true);
+            numberOfQuestionsAnswered++;
+        }
         else
+        {
             DisplayCorrectText(false);
+            numberOfQuestionsAnswered++;
+        }
     }
 
     private void DisplayCorrectText(bool inCorrect)

@@ -25,6 +25,8 @@ MonoBehaviour:
   instructionsIndex: 0
   instructionsSpeechText:
   - Hi, I am a school girl.
-  - Please help me answer questions.
+  - You need to collect all five donuts.
+  - ' Remember to observe the safety rules as you collect them. '
+  - Once you have all 5 donuts go to the building with the green outline.
   objectivesText: 
   introSpeechText: []

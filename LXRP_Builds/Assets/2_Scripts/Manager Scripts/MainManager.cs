@@ -1,10 +1,10 @@
-﻿using System;
+﻿//using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.XR.ARFoundation;
-using TMPro;
+//using UnityEngine.UI;
+//using UnityEngine.XR.ARFoundation;
+//using TMPro;
 using PathCreation;
 
 // Singleton class
@@ -88,6 +88,7 @@ public class MainManager : MonoBehaviour
             // When the player completes the game
             case EGameState.PLAYER_COMPLETE:
                 Destroy(currSelectedPlayer);
+                Destroy(GameObject.FindGameObjectWithTag("Player"));
                 UIManager.Instance.DisplayGameFinishedMessage();
                 break;
 
@@ -369,6 +370,8 @@ public class MainManager : MonoBehaviour
         if (score <= 0)
             SetState(EGameState.GAME_OVER);
     }
+
+    public int GetScore() { return score; }
 
 #endregion
 }

@@ -30,6 +30,7 @@ TagManager:
   - Level3Question3
   - Level3Question4
   - Level3Question5
+  - InfoHub
   layers:
   - Default
   - TransparentFX

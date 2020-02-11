@@ -1,9 +1,9 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+//using System.Collections.Generic;
 using UnityEngine;
 using PathCreation;
 using UnityEngine.AI;
-using TMPro;
+//using TMPro;
 using System;
 
 [RequireComponent(typeof(PlayerAnimController))]
@@ -100,6 +100,15 @@ public abstract class ABPlayerScript : MonoBehaviour, IClickable
                 MainManager.Instance.SetState(EGameState.QUEST_COMPLETE);
             }
         }
+        else if (other.gameObject.tag == "InfoHub")
+        {
+            Debug.Log("Check IH collision");
+            if (UIManager.Instance.AllDonutsCollected)
+            {
+                Debug.Log("END GAME STARTED");
+                MainManager.Instance.SetState(EGameState.PLAYER_COMPLETE);
+            }
+        }
         else if (other.gameObject.tag.Substring(0, 14) == "Level3Question")
         {
             if (MainManager.Instance.CurrSelectedPlayer.PlayerInfo.characterMission == EMissionType.ANSWER_QUESTIONS)
@@ -109,6 +118,7 @@ public abstract class ABPlayerScript : MonoBehaviour, IClickable
                 UIManager.Instance.ShowQuestionUI(questionNo);
             }
         }
+       
     }
 
     // Process events when player continues started collisions with other objects
@@ -213,7 +223,7 @@ public abstract class ABPlayerScript : MonoBehaviour, IClickable
         pathFollower.enabled = !condition;
     }
 
-    // Event handler for mouse click on player - NOT CURRENTLY IN USE
+    // Event handler for mouse click on player 
     public void OnClick()
     {
         if (MainManager.Instance.CurrSelectedPlayer != this)

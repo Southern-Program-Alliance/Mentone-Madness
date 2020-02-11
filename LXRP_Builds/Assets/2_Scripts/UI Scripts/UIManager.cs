@@ -74,9 +74,20 @@ public class UIManager : MonoBehaviour
     [SerializeField] List<GameObject> starImages = new List<GameObject>();
     [SerializeField] Button starImageCloseButton = null;
     private int currentQuestionIndex;
+    private const int NUM_QUESTIONS = 5;
+    public bool AllDonutsCollected = false;
 
+    // Redner Images
     [SerializeField] GameObject renderImage1;
+    [SerializeField] GameObject renderImage2;
+    [SerializeField] GameObject renderImage3;
+    [SerializeField] GameObject renderImage4;
     [SerializeField] GameObject renderImage5;
+
+    // End game UI
+    [SerializeField] public GameObject endGameComponent;
+    [SerializeField] TextMeshProUGUI finalScore;
+    GameObject infoHub;
 
     private SpeechTextUI speechTextComponent;
     [SerializeField] GameObject smallMenu = null;
@@ -109,6 +120,13 @@ public class UIManager : MonoBehaviour
         
     }
 
+    public void ShowInfoHub()
+    {
+        infoHub = GameObject.FindGameObjectWithTag("InfoHub");
+        Debug.Log("Info Hub: " + infoHub);
+        infoHub.GetComponent<Outline>().OutlineWidth = 7;
+    }
+
     private void OnStarButtonClicked()
     {
         currentQuestionIndex = questionComponent.GetCurrentQuestionIndex();
@@ -118,6 +136,12 @@ public class UIManager : MonoBehaviour
         ShowRender(currentQuestionIndex);
         //renderImage1.gameObject.SetActive(true);
         HideQuestionUI();
+        Debug.Log("Num Questions: " + questionComponent.numberOfQuestionsAnswered);
+        if (questionComponent.numberOfQuestionsAnswered == NUM_QUESTIONS)
+        {
+            AllDonutsCollected = true;
+            ShowInfoHub();
+        }
     }
 
     private void ShowRender(int inIndex)
@@ -128,6 +152,15 @@ public class UIManager : MonoBehaviour
                 renderImage1.gameObject.SetActive(true);
                 break;
             case 1:
+                renderImage2.gameObject.SetActive(true);
+                break;
+            case 2:
+                renderImage3.gameObject.SetActive(true);
+                break;
+            case 3:
+                renderImage4.gameObject.SetActive(true);
+                break;
+            case 4:
                 renderImage5.gameObject.SetActive(true);
                 break;
             default:
@@ -287,13 +320,22 @@ public class UIManager : MonoBehaviour
         StartCoroutine(DoGameOverDelay());
     }
 
+    private void ShowAllRenders()
+    {
+        renderImage1.gameObject.SetActive(true);
+        renderImage2.gameObject.SetActive(true);
+        renderImage3.gameObject.SetActive(true);
+        renderImage4.gameObject.SetActive(true);
+        renderImage5.gameObject.SetActive(true);
+    }
+
     // Display "Game Finished" for 3 seconds
     public void DisplayGameFinishedMessage()
     {
         HideLevelStatusText();
-        GameOver.text = "Game Finished!";
-        GameOver.gameObject.SetActive(true);
-        StartCoroutine(DoGameOverDelay());
+        finalScore.text = MainManager.Instance.GetScore() + " points.";
+        endGameComponent.gameObject.SetActive(true);
+        ShowAllRenders();
     }
 
     // Coroutine to switch "Game Over" message off and show end game menu
