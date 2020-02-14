@@ -11,7 +11,7 @@ public class RunOnEditor : MonoBehaviour
     }
     private void Awake()
     {
-        if (Application.isEditor)
+        if (Application.isEditor || !Application.isMobilePlatform)
         {
             Destroy(ARCamera.gameObject);
         }

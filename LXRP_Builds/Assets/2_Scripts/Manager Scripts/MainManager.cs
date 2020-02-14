@@ -102,8 +102,8 @@ public class MainManager : MonoBehaviour
 
     // Determine game worl placement method
     private void InitializeGame()
-    {
-        if (Application.isEditor)
+    { 
+        if (Application.isEditor || !Application.isMobilePlatform)
         {
             placementScript.SetState(EARState.PLACEMENT);
             return;

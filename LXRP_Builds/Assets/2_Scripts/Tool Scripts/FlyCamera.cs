@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+﻿//#if UNITY_EDITOR
 using UnityEngine;
 using System.Collections;
 
@@ -104,4 +104,4 @@ public class FlyCamera : MonoBehaviour
         transform.SetPositionAndRotation(newPos, newRot);
     }
 }
-#endif
+//#endif

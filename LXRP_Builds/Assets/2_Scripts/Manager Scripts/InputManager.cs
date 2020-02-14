@@ -38,7 +38,7 @@ public class InputManager : MonoBehaviour
     void Update()
     {
         // Listen for input on the editor
-        if (Application.isEditor)
+        if (Application.isEditor || !Application.isMobilePlatform)
         {
             if (Input.GetMouseButtonDown(0))
             {
