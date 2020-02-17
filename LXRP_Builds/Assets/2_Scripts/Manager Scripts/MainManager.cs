@@ -116,7 +116,8 @@ public class MainManager : MonoBehaviour
     private void StartLevel()
     {
         // Display "Level" label 
-        UIManager.Instance.DisplayLevelStatusMessage(EGameState.QUEST_START, currSelectedPlayer.PlayerInfo.characterMission);
+
+            UIManager.Instance.DisplayLevelStatusMessage(EGameState.QUEST_START, currSelectedPlayer.PlayerInfo.characterMission);
 
         // Delay then display character level instructions
         StartCoroutine(DelayThenStartLevel());
@@ -203,6 +204,7 @@ public class MainManager : MonoBehaviour
         switch (mission)
         {
             case EMissionType.FIND_CORRECT_RULES:
+                UIManager.Instance.Level2Container.gameObject.SetActive(true);
                 break;
             case EMissionType.COLLECT_DONUTS:
                 SpawnManager.Instance.StartSpawn(ESpawnSelection.DONUTS);

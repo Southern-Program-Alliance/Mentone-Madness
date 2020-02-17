@@ -68,6 +68,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject renderImage4;
     [SerializeField] GameObject renderImage5;
 
+    //Level2 prefabs on and off
+    [SerializeField] public GameObject Level2Container = null;
+
     // End game UI
     [SerializeField] public GameObject endGameComponent;
     [SerializeField] TextMeshProUGUI finalScore;
