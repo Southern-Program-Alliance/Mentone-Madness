@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿// Manager class to store and handle the game object spawns 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PathCreation;
@@ -50,17 +51,20 @@ public class SpawnManager : MonoBehaviour
         PreparePools(seed);
     }
 
+    // Return scriptable object data for current Question UI question
     public SO_QuestionInfo GetQuestion(int inIndex)
     {
         return playerObjectsComponent.GetQuestion(inIndex);
     }
 
-        // CAN BE REFACTORED
-        public void PreparePools(int seed)
+    // CAN BE REFACTORED
+    // Initialise all object spawn pools
+    public void PreparePools(int seed)
     {
         // Prepare the poolInfos
         pedestrianPoolInfo = new IPoolInfo(ESpawnSelection.PEDESTRIANS, pedestrianPoolAmt, pedestrianMaxSpawnDelay,
             pedestrianPaths, true);
+
         // Get all prefabs from the list 
         pedestriansPrefabs = Resources.LoadAll<GameObject>("PEDESTRIANS");
         pedestrianComponent.InitialzePool(pedestrianPoolInfo, seed, pedestriansPrefabs);

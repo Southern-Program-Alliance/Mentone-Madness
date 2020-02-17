@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿// Utility class to animate text display
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using TMPro;
@@ -29,6 +30,7 @@ public class SpeechTextUI : MonoBehaviour
         introSpeechNext.onClick.AddListener(NextSentence);
     }
 
+    // Initiate text dsiplay animation
     public void StartIntroSpeech(string[] speechText, Sprite characterPortrait, int inStartIndex)
     {
         index = inStartIndex;
@@ -44,6 +46,7 @@ public class SpeechTextUI : MonoBehaviour
         StartCoroutine(Talk());
     }
 
+    // Obtain next element of text array
     private void NextSentence()
     {
         if (isTalking)
@@ -64,6 +67,7 @@ public class SpeechTextUI : MonoBehaviour
         }
     }
 
+    // Conduct "talking" animation and display actions
     IEnumerator Talk()
     {
         isTalking = true;
@@ -82,6 +86,7 @@ public class SpeechTextUI : MonoBehaviour
         // Player animation
     }
 
+    // Remove listener on IntroSpeechNext button
     private void OnDestroy()
     {
         if(introSpeechNext != null)

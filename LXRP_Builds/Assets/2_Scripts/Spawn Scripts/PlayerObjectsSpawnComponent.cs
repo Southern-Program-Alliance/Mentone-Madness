@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Utilty class to handle spawning of player related objects
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,11 +42,6 @@ public class PlayerObjectsSpawnComponent : MonoBehaviour
 
         // Sort players into correct level order
         Array.Sort(playerCharacters, delegate (GameObject a, GameObject b) { return a.GetComponent<ABPlayerScript>().PlayerInfo.missionIndex.CompareTo((int)b.GetComponent<ABPlayerScript>().PlayerInfo.missionIndex); });
-
-        //foreach (GameObject g in playerCharacters)
-        //{
-        //    Debug.Log("Player Character: " + g + g.GetComponent<ABPlayerScript>().PlayerInfo.missionIndex + g.GetComponent<ABPlayerScript>().PlayerInfo.characterMission);
-        //}
     }
 
     private void Start()
@@ -53,7 +49,7 @@ public class PlayerObjectsSpawnComponent : MonoBehaviour
        
     }
 
-    // Spawn rulbook objects into game 
+    // Spawn rulebook objects into game 
     public void SpawnRules()
     {
         for (int i = 0; i < rules.Length; i++)

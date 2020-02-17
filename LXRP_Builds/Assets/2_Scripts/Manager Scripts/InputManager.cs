@@ -1,7 +1,5 @@
-﻿//using System.Collections;
-//using System.Collections.Generic;
+﻿// Manager class handling ray casting actions
 using UnityEngine;
-//using UnityEngine.AI;
 using UnityEngine.EventSystems;
 
 public class InputManager : MonoBehaviour
@@ -37,8 +35,8 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
-        // Listen for input on the editor
-        if (Application.isEditor || !Application.isMobilePlatform)
+        // Listen for input on the editor or non-mobile standalone build
+        if (Application.isEditor)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -54,7 +52,7 @@ public class InputManager : MonoBehaviour
                 if (!EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
                     InitiateCast();
             }
-        }   
+        } 
     }
 
     private void InitiateCast()

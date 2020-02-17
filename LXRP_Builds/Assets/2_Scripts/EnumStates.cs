@@ -1,4 +1,5 @@
-﻿public enum EGameState
+﻿// Data storage script for all game Enumeration types and values
+public enum EGameState
 {
     BLANK,
     BEGIN,

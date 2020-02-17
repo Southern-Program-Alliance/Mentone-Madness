@@ -11,11 +11,12 @@ public class RunOnEditor : MonoBehaviour
     }
     private void Awake()
     {
-        if (Application.isEditor || !Application.isMobilePlatform)
+        // Destroy AR camera object if running in editor or as non-mobile stand alone build
+        if (Application.isEditor)
         {
             Destroy(ARCamera.gameObject);
         }
-        else
+        else // Destroy "regular" camera if running a mobile device build
         {
             Destroy(this.gameObject);
         }

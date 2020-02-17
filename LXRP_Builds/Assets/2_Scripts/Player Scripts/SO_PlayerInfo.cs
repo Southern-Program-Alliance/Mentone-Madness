@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿// Class to respresent Player scriptable object 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

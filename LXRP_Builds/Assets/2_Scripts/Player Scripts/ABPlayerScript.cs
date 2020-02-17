@@ -1,9 +1,8 @@
-﻿using System.Collections;
-//using System.Collections.Generic;
+﻿// Super class to handle function for player actions and collisions
+using System.Collections;
 using UnityEngine;
 using PathCreation;
 using UnityEngine.AI;
-//using TMPro;
 using System;
 
 [RequireComponent(typeof(PlayerAnimController))]
@@ -46,7 +45,6 @@ public abstract class ABPlayerScript : MonoBehaviour, IClickable
         playerInfo.attachedObject = gameObject;
 
         SwitchComponents(false);
-        //SwitchComponents(true);
     }
 
     private void OnEnable()
@@ -57,61 +55,58 @@ public abstract class ABPlayerScript : MonoBehaviour, IClickable
     // Process events when player begins collision with other objects
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Vehicle")
+        if (other.gameObject.tag == "Vehicle") // Vechicle hit
         {
             //Debug.Log("Player got hit by a vehicle");
         }
-        else if (other.gameObject.tag.Substring(0, 4) == "Book")
+        else if (other.gameObject.tag.Substring(0, 4) == "Book") // Interact with rulebook
         {
-            Debug.Log("HIT BOOK: " + other.gameObject.tag);
             RulesScript ruleBook = other.GetComponent<RulesScript>();
             ruleBook.CollideWithPlayer();
-
         }
-        else if (other.gameObject.tag == "PedestrianBalcombe")
+        else if (other.gameObject.tag == "PedestrianBalcombe") // Level crosssing on Balcombe Road
         {
             MainManager.Instance.SetVehicleSpeed(0.0f);
             isOnCrossing = true;
         }
-        else if (other.gameObject.tag == "ComoCrossing")
+        else if (other.gameObject.tag == "ComoCrossing") // Level crossing on Como Parade
         {
             MainManager.Instance.SetVehicleSpeed(0.0f);
             isOnCrossing = true;
         }
-        else if (other.gameObject.tag == "Road")
+        else if (other.gameObject.tag == "Road") // Player runs on road
         {
-            if (MainManager.Instance.GetState() == EGameState.QUEST_START)
+            if (MainManager.Instance.GetState() == EGameState.QUEST_START) // Only activate when level has started
             {
                 isOnRoad = true;
 
-                if (!isOnCrossing)
+                if (!isOnCrossing) // Check to see if player is on level crossing
                     StartCoroutine(DecreaseScore());
             }
         }
-        else if (other.gameObject.tag == "Station")
+        else if (other.gameObject.tag == "Station") // "Arrive" at station at end of Level 1
         {
             if (MainManager.Instance.CurrSelectedPlayer.PlayerInfo.characterMission == EMissionType.GET_TO_STATION)
             {
-                Outline outline = other.GetComponent<Outline>();
-                outline.OutlineWidth = 0.0f;
+                Outline stationOutline = other.GetComponent<Outline>();
+                stationOutline.OutlineWidth = 0.0f;
                 SphereCollider collider = other.GetComponent<SphereCollider>();
                 collider.gameObject.SetActive(false);
                 MainManager.Instance.UpdateScore(EScoreEvent.AT_STATION);
                 MainManager.Instance.SetState(EGameState.QUEST_COMPLETE);
             }
         }
-        else if (other.gameObject.tag == "InfoHub")
+        else if (other.gameObject.tag == "InfoHub") // "Arrive" at InforHub at end of Level 3
         {
-            Debug.Log("Check IH collision");
             if (UIManager.Instance.AllDonutsCollected)
             {
-                Debug.Log("END GAME STARTED");
                 MainManager.Instance.SetState(EGameState.PLAYER_COMPLETE);
             }
         }
-        else if (other.gameObject.tag.Substring(0, 14) == "Level3Question")
+        else if (other.gameObject.tag.Substring(0, 14) == "Level3Question") // "Collecting" a donut on Level 3
         {
-            if (MainManager.Instance.CurrSelectedPlayer.PlayerInfo.characterMission == EMissionType.ANSWER_QUESTIONS)
+            // Only enforce collision when playing Level 3 mission 
+            if (MainManager.Instance.CurrSelectedPlayer.PlayerInfo.characterMission == EMissionType.ANSWER_QUESTIONS) 
             {
                 int questionNo = Int32.Parse(other.gameObject.tag.Substring(14, 1));
                 questionNo--;
@@ -124,15 +119,14 @@ public abstract class ABPlayerScript : MonoBehaviour, IClickable
     // Process events when player continues started collisions with other objects
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag == "Road")
+        if (other.gameObject.tag == "Road") // Player staying on road
         {
+            // Enforce only when a level has started
             if (MainManager.Instance.GetState() == EGameState.QUEST_START)
             {
-                Debug.Log("Player still on the road - Collider");
-                Debug.Log("Is On Crosssing: " + isOnCrossing);
                 isOnRoad = true;
 
-                if (!isOnCrossing)
+                if (!isOnCrossing) // Player still on road but not using a level crossing
                     StartCoroutine(DecreaseScore());
             }
         }
@@ -160,22 +154,19 @@ public abstract class ABPlayerScript : MonoBehaviour, IClickable
     {
         if (other.gameObject.tag == "Road")
         {
+            // Enforce only when level has started
             if (MainManager.Instance.GetState() == EGameState.QUEST_START)
             {
-                Debug.Log("Player stepped off the road - Trigger exit");
-                // Game End
-                isOnRoad = false;
+                isOnRoad = false; // Flag that player is no longer standing on the road
             }
         }
-        else if (other.gameObject.tag == "PedestrianBalcombe")
+        else if (other.gameObject.tag == "PedestrianBalcombe") // Player stepped off Balcombe Road Level Crossing
         {
-            Debug.Log("Xing EXIT");
             isOnCrossing = false;
             MainManager.Instance.SetVehicleSpeed(1.3f);
         }
-        else if (other.gameObject.tag == "ComoCrossing")
+        else if (other.gameObject.tag == "ComoCrossing") // Player stepped off Como Parade crossing
         {
-            Debug.Log("Como EXIT");
             isOnCrossing = false;
             MainManager.Instance.SetVehicleSpeed(1.3f);
         }
@@ -229,29 +220,29 @@ public abstract class ABPlayerScript : MonoBehaviour, IClickable
         if (MainManager.Instance.CurrSelectedPlayer != this)
             return;
 
-        SwitchComponents(true);
+        SwitchComponents(true); // Enable pointer & path follower and disable outline components
 
-        //MainManager.Instance.SetState(EGameState.QUEST_START);
         EnactSpecificMissionActions();
     }
 
+    // Spawn level specifics objects once player has been "selected"
     private void EnactSpecificMissionActions()
     { 
         switch (MainManager.Instance.CurrSelectedPlayer.PlayerInfo.characterMission)
         {
-            case EMissionType.FIND_CORRECT_RULES:
+            case EMissionType.FIND_CORRECT_RULES: // Level 2
                 if (!rulebooksSpawned)
                 {
                     SpawnManager.Instance.StartSpawn(ESpawnSelection.RULES);
                     rulebooksSpawned = true;
                 }
                 break;
-            case EMissionType.GET_TO_STATION:
+            case EMissionType.GET_TO_STATION: // Level 1
                 GameObject station = GameObject.FindGameObjectWithTag("Station");
                 Outline outline = station.GetComponent<Outline>();
                 outline.OutlineWidth = 7.0f;
                 break;
-            case EMissionType.ANSWER_QUESTIONS:
+            case EMissionType.ANSWER_QUESTIONS: // Level 3
                 UIManager.Instance.ShowDonuts(true);
                 break;
             default:
@@ -259,11 +250,13 @@ public abstract class ABPlayerScript : MonoBehaviour, IClickable
         }
     }
 
+    // Utility function to message manager
     public void SendMessageToManager()
     {
         throw new System.NotImplementedException();
     }
 
+    // Set the navmesh agent component to a new position 
     public void MoveToDestination(Vector3 pos)
     {
         navMeshAgent.SetDestination(pos);

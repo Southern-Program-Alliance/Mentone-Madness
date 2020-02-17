@@ -16,28 +16,12 @@ public class UIManager : MonoBehaviour
     private static UIManager _instance;
     public static UIManager Instance { get { return _instance; } }
 
-    private void Awake()
-    {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            _instance = this;
-        }
-
-        speechTextComponent = GetComponent<SpeechTextUI>();
-        questionComponent = GetComponent<QuestionUIManager>();
-    }
-
+    // Level status text components
     [SerializeField] TextMeshProUGUI scoreText = null;
     [SerializeField] TextMeshProUGUI LevelStatus = null;
     [SerializeField] TextMeshProUGUI GameOver = null;
     TextMeshProUGUI[] TextElements = null;
-    //[SerializeField] GameObject LevelStatusObject = null;
-
-    private Animator animatorScoreText = null;
+        private Animator animatorScoreText = null;
 
     [SerializeField] Button resetButton = null;
     [SerializeField] Button backToMenuButton = null;
@@ -89,10 +73,25 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI finalScore;
     GameObject infoHub;
 
+    // Spech UI components
     private SpeechTextUI speechTextComponent;
     [SerializeField] GameObject smallMenu = null;
     private bool levelTextSet = false;
 
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
+
+        speechTextComponent = GetComponent<SpeechTextUI>();
+        questionComponent = GetComponent<QuestionUIManager>();
+    }
     private void Start()
     {
         if (!CheckMissingRefs())
@@ -100,6 +99,7 @@ public class UIManager : MonoBehaviour
 
         animatorScoreText = scoreText.gameObject.GetComponent<Animator>();
 
+        // Add listeners and delegate function to UIManager components
         resetButton.onClick.AddListener(OnResetButtonClicked);
         backToMenuButton.onClick.AddListener(OnBackToMenuButtonClicked);
 
@@ -113,30 +113,23 @@ public class UIManager : MonoBehaviour
         starButton.onClick.AddListener(OnStarButtonClicked);
         starImageCloseButton.onClick.AddListener(OnStarButtonCloseClicked);
 
-
         TextElements = FindObjectsOfType<TextMeshProUGUI>();
-        //smallMenu = GameObject.FindGameObjectWithTag("menu");
-        //smallMenu.SetActive(false);
-        
     }
 
+    // Make "infoHub" object outline appear when all donuts have been collected during Level 3
     public void ShowInfoHub()
     {
         infoHub = GameObject.FindGameObjectWithTag("InfoHub");
-        Debug.Log("Info Hub: " + infoHub);
         infoHub.GetComponent<Outline>().OutlineWidth = 7;
     }
 
+    // Actions when "Star" button on QuestionUI is clicked
     private void OnStarButtonClicked()
     {
         currentQuestionIndex = questionComponent.GetCurrentQuestionIndex();
 
-        //starImages[currentQuestionIndex].SetActive(true);
-        //starImageCloseButton.gameObject.SetActive(true);
         ShowRender(currentQuestionIndex);
-        //renderImage1.gameObject.SetActive(true);
         HideQuestionUI();
-        Debug.Log("Num Questions: " + questionComponent.numberOfQuestionsAnswered);
         if (questionComponent.numberOfQuestionsAnswered == NUM_QUESTIONS)
         {
             AllDonutsCollected = true;
@@ -144,6 +137,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    // Reveal specified render image within game world "above" level map
     private void ShowRender(int inIndex)
     {
         switch(inIndex)
@@ -168,29 +162,32 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    // Redundant function?
     private void OnStarButtonCloseClicked()
     {
         starImages[currentQuestionIndex].SetActive(false);
         starImageCloseButton.gameObject.SetActive(false);
     }
 
-
-
+    // Delegate function when "True" check box is checked
     private void OnRuleSelectionTrue(bool isSlected)
     {
         MainManager.Instance.OnRuleSelect(isSlected, ruleInfo, true);
     }
 
+    // Delegate function when "False" check box is checked
     private void OnRuleSelectionFalse(bool isSlected)
     {
         MainManager.Instance.OnRuleSelect(isSlected, ruleInfo, false);
     }
 
+    // Function to determine all 5 rulebooks have been collected
     public bool AllRuleBooksCollected()
     {
         return numRulebooksCollected == MAX_NUM_RULEBOOKS;
     }
 
+    // Alter rulebook UI with text that shows result of check box seletion
     public void UpdateRulebookText(string inText)
     {
         ruleText.text = inText;
@@ -199,6 +196,8 @@ public class UIManager : MonoBehaviour
         ruleOkButton.gameObject.SetActive(true);
     }
 
+    // Delegate function to run when 'OK' button on rule book UI is clicked
+    // Contains trigger end of Level 2 check
     public void OnRuleOKClicked()
     {
         ruleText.text = "";
@@ -208,6 +207,7 @@ public class UIManager : MonoBehaviour
             MainManager.Instance.SetState(EGameState.QUEST_COMPLETE);
     }
 
+    // Restore rulebook UI to be ready to display next True/False scenario
     private void ResetRulebookUI()
     {
         ruleOkButton.gameObject.SetActive(false);
@@ -218,30 +218,34 @@ public class UIManager : MonoBehaviour
         starButton.gameObject.SetActive(false);
     }
 
+    // Delegate function when 'A' button is clicked
     private void OnQuestionAClicked()
     {
         Debug.Log("A Clicked");
         questionComponent.OnQuestionButtonClicked('A');
     }
 
+    // Delegate function when 'B' button is clicked
     private void OnQuestionBClicked()
     {
         Debug.Log("B Clicked");
         questionComponent.OnQuestionButtonClicked('B');
-
     }
 
+    // Delegate function when 'C' button is clicked
     private void OnQuestionCClicked()
     {
         Debug.Log("C Clicked");
         questionComponent.OnQuestionButtonClicked('C');
     }
 
+    // Delegate function to "hide" QuestionUI when OK button is clicked
     private void OnOkButtonClicked()
     {
         HideQuestionUI();
     }
 
+    // Removes Listener from component objects
     private void OnDestroy()
     {
         if (resetButton != null)
@@ -278,7 +282,6 @@ public class UIManager : MonoBehaviour
     {
         if (!levelTextSet)
         {
-            //LevelStatus = getTextElement("LevelMessage");
             LevelStatus.gameObject.SetActive(true);
             levelTextSet = true;
         }
@@ -295,20 +298,18 @@ public class UIManager : MonoBehaviour
     }
 
     // Obtain specified text element
-    public TextMeshProUGUI getTextElement(string inLabel)
-    {
-        TextMeshProUGUI result = null;
+    //public TextMeshProUGUI getTextElement(string inLabel)
+    //{
+    //    TextMeshProUGUI result = null;
 
-        GameObject obj = GameObject.FindGameObjectWithTag(inLabel);
-        result = obj.GetComponent<TextMeshProUGUI>();
-        Debug.Log("RESULT: " + result);
-        return result;
-    }
+    //    GameObject obj = GameObject.FindGameObjectWithTag(inLabel);
+    //    result = obj.GetComponent<TextMeshProUGUI>();
+    //    return result;
+    //}
 
     // Initialise "Game Over" message, set to invisible
     public void InitGameOverMessage()
     {
-        //GameOver = getTextElement("GameOver");
         GameOver.gameObject.SetActive(false);
     }
     
@@ -320,6 +321,7 @@ public class UIManager : MonoBehaviour
         StartCoroutine(DoGameOverDelay());
     }
 
+    // Display all in game world renders at game end
     private void ShowAllRenders()
     {
         renderImage1.gameObject.SetActive(true);
@@ -359,6 +361,7 @@ public class UIManager : MonoBehaviour
         LevelStatus.gameObject.SetActive(true);
     }
 
+    // Assign rule information to Rule Book UI components
     public void SetRuleInfo(SO_RuleInfo info)
     {
         ruleInfo = info;
@@ -369,6 +372,7 @@ public class UIManager : MonoBehaviour
         ruleBookUI.SetActive(true);
     }
 
+    // Assign player information to current character scomponents
     public void SetPlayerInfo(SO_PlayerInfo info)
     {
         characterNameTxt.text = info.characterName;
@@ -380,11 +384,13 @@ public class UIManager : MonoBehaviour
         UpdateRules(0);
     }
 
+    // Enact animations and display for instructions display
     public void StartIntroSpeech(string[] speechText, Sprite characterPortrait, int startIndex)
     {
         speechTextComponent.StartIntroSpeech(speechText, characterPortrait, startIndex);
     }
 
+    // Sets update rule text
     public void UpdateRules(int no)
     {
         string text = no + " / "
@@ -393,6 +399,7 @@ public class UIManager : MonoBehaviour
         updateText.text = text;
     }
 
+    // Runs updated score animation and dipslays soecified score total
     public void UpdateScore(int score)
     {
         Debug.Log("UI Manager Update Score");
@@ -400,6 +407,7 @@ public class UIManager : MonoBehaviour
         animatorScoreText.SetBool("isScoreEvent", true);
     }
 
+    // Make QuestionUI visible with current question
     public void ShowQuestionUI(int inIndex)
     {
         questionComponent.SetActive(true);
@@ -408,26 +416,29 @@ public class UIManager : MonoBehaviour
         HideDonut(inIndex);
     }
 
+    // Hide Question UI
     public void HideQuestionUI()
     {
         questionComponent.SetActive(false);
     }
 
+    // Assign question/scenario text component the current question text
     public void SetScenarioText()
     {
         questionComponent.SetScenarioText();
     }
 
+    // Toggle function to display A, B, C buttons, options text and star button
     public void ShowHideABCButtons(bool toggle)
     {
         aButton.gameObject.SetActive(toggle);
         bButton.gameObject.SetActive(toggle);
         cButton.gameObject.SetActive(toggle);
         questionComponent.ShowOptionsText(toggle);
-        //okButton.gameObject.SetActive(!toggle);
         starButton.gameObject.SetActive(!toggle);
     }
 
+    // Make all "donut" objects visible at start of Level 3
      public void ShowDonuts(bool show)
     {
         foreach (GameObject d in donuts)
@@ -436,11 +447,13 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    // Make specified "donut" object inactive when collected
     public void HideDonut(int index)
     {
         donuts[index].gameObject.SetActive(false);
     }
 
+    // Ensure certain references are not null, notify of they are
     private bool CheckMissingRefs()
     {
         if (resetButton == null)

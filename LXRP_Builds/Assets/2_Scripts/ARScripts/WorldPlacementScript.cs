@@ -223,7 +223,7 @@ public class WorldPlacementScript : MonoBehaviour
         else if(CURRSTATE == EARState.PLACEMENT)
         {
             //Placeobject at origin if in the editor
-            if (Application.isEditor || !Application.isMobilePlatform)
+            if (Application.isEditor)
             {
                 PlaceObject(Vector3.zero, Quaternion.identity);
                 return;
