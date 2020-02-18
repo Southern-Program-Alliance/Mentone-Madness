@@ -15,7 +15,8 @@ public class UIManager : MonoBehaviour
     // Singleton Members
     private static UIManager _instance;
     public static UIManager Instance { get { return _instance; } }
-
+    ABPlayerScript UIcurrSelectedPlayer;
+    public ABPlayerScript UICurrSelectedPlayer { get => UIcurrSelectedPlayer; }
     // Level status text components
     [SerializeField] TextMeshProUGUI scoreText = null;
     [SerializeField] TextMeshProUGUI LevelStatus = null;
@@ -70,6 +71,16 @@ public class UIManager : MonoBehaviour
 
     //Level2 prefabs on and off
     [SerializeField] public GameObject Level2Container = null;
+
+    //Sidebar set up according to levels
+    [SerializeField] public GameObject Button1 = null;
+    [SerializeField] public GameObject Button2 = null;
+    [SerializeField] public GameObject Button3 = null;
+    [SerializeField] public GameObject Button4 = null;
+    [SerializeField] public GameObject Button5 = null;
+
+    //Level1 Arrows
+    [SerializeField] public GameObject Level1greenArrows = null;
 
     // End game UI
     [SerializeField] public GameObject endGameComponent;
@@ -379,12 +390,26 @@ public class UIManager : MonoBehaviour
     public void SetPlayerInfo(SO_PlayerInfo info)
     {
         characterNameTxt.text = info.characterName;
-        portraitImage.sprite = info.portraitImage;
         fullImage.sprite = info.fullImage;
         collectibleImage.sprite = info.collectibleImage;
         objectiveText.text = info.objectivesText;
-       
-        UpdateRules(0);
+       if (characterNameTxt.text == "Construction Worker")
+        {
+            portraitImage.sprite = info.portraitImage;
+            UpdateRules(0);
+        }
+       else if(characterNameTxt.text == "Hotdog Vendor")
+        {
+            portraitImage.sprite = info.portraitImage;
+            updateText.text = "Folow the green arrow";
+        }
+        else if (characterNameTxt.text == "School Girl")
+        {
+            //portraitImage.sprite = UIManager.Instance.schoolportraitImage;
+            portraitImage.sprite = info.portraitImage;
+            updateText.text = "Look up once all the donuts are collected";
+        }
+
     }
 
     // Enact animations and display for instructions display
@@ -396,10 +421,10 @@ public class UIManager : MonoBehaviour
     // Sets update rule text
     public void UpdateRules(int no)
     {
-        string text = no + " / "
-            + SpawnManager.Instance.getNoOfSpawns(ESpawnSelection.RULES)
-            + " Rules Selected";
-        updateText.text = text;
+            string text = no + " / "
+                + SpawnManager.Instance.getNoOfSpawns(ESpawnSelection.RULES)
+                + " Rules Selected";
+            updateText.text = text;
     }
 
     // Runs updated score animation and dipslays soecified score total

@@ -11,7 +11,7 @@ public class MainManager : MonoBehaviour
     public static MainManager Instance { get { return _instance; } }
 
     // Main selected character
-    ABPlayerScript currSelectedPlayer;
+     ABPlayerScript currSelectedPlayer;
     public ABPlayerScript CurrSelectedPlayer { get => currSelectedPlayer; }
 
     private EGameState managerState = EGameState.BLANK;
@@ -92,16 +92,21 @@ public class MainManager : MonoBehaviour
 
     // Determine game world placement method
     private void InitializeGame()
-    { 
-        if (Application.isEditor)
+    {
+        Debug.Log("Platform:" + Application.platform);
+
+#if UNITY_ANDROID
+        if (Application.isEditor || Application.platform == RuntimePlatform.WindowsPlayer)
         {
             placementScript.SetState(EARState.PLACEMENT);
             return;
         }
         placementScript.SetState(EARState.TUTORIAL);
+#else
+        placementScript.SetState(EARState.PLACEMENT);
+#endif
     }
-
-     // Initliase next level - spawn level elements and adjust score
+    // Initliase next level - spawn level elements and adjust score
     private void InitLevel()
     {
         UIManager.Instance.InitGameOverMessage();
@@ -205,6 +210,12 @@ public class MainManager : MonoBehaviour
         {
             case EMissionType.FIND_CORRECT_RULES:
                 UIManager.Instance.Level2Container.gameObject.SetActive(true);
+                UIManager.Instance.Button2.gameObject.SetActive(true);
+                UIManager.Instance.Button3.gameObject.SetActive(true);
+                UIManager.Instance.Button4.gameObject.SetActive(true);
+                UIManager.Instance.Button5.gameObject.SetActive(true);
+                UIManager.Instance.Level1greenArrows.gameObject.SetActive(false);
+               
                 break;
             case EMissionType.COLLECT_DONUTS:
                 SpawnManager.Instance.StartSpawn(ESpawnSelection.DONUTS);

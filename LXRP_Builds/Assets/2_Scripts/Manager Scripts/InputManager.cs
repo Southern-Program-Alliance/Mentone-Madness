@@ -36,23 +36,33 @@ public class InputManager : MonoBehaviour
     void Update()
     {
         // Listen for input on the editor or non-mobile standalone build
-        if (Application.isEditor)
+#if UNITY_ANDROID
+       if (Application.isEditor)
+       {
+           if (Input.GetMouseButtonDown(0))
+           {
+               if (!EventSystem.current.IsPointerOverGameObject())
+                   InitiateCast();
+           }
+           return;
+       }
+       else
+       {
+           if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+          {
+               if (!EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+                   InitiateCast();
+           }
+       } 
+#else
+        if (Input.GetMouseButtonDown(0))
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                if (!EventSystem.current.IsPointerOverGameObject())
-                    InitiateCast();
-            }
-            return;
+            if (!EventSystem.current.IsPointerOverGameObject())
+                InitiateCast();
         }
-        else
-        {
-            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
-            {
-                if (!EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
-                    InitiateCast();
-            }
-        } 
+#endif
+
+
     }
 
     private void InitiateCast()

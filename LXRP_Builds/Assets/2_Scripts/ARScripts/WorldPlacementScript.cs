@@ -220,15 +220,18 @@ public class WorldPlacementScript : MonoBehaviour
             }
         }
 
-        else if(CURRSTATE == EARState.PLACEMENT)
+        else if (CURRSTATE == EARState.PLACEMENT)
         {
             //Placeobject at origin if in the editor
+#if UNITY_ANDROID
             if (Application.isEditor)
             {
                 PlaceObject(Vector3.zero, Quaternion.identity);
                 return;
             }
-
+#else
+            PlaceObject(Vector3.zero, Quaternion.identity);
+#endif
             UpdatePlacementPose(); // Check for trackable plane surfaces
             UpdatePlacementIndicator();
 

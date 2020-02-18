@@ -19,14 +19,16 @@ MonoBehaviour:
   Y: 0
   Z: 0
   portraitImage: {fileID: 21300000, guid: a3ae1a1bc5bf39f4cba31132074517fc, type: 3}
-  fullImage: {fileID: 0}
-  collectibleImage: {fileID: 0}
-  characterName: 
+  fullImage: {fileID: 21300000, guid: 6d4a3778c752fc342bae19c6a64426f4, type: 3}
+  collectibleImage: {fileID: 21300000, guid: 6220971fb2408d842993bac398d9a1ae, type: 3}
+  characterName: School Girl
   instructionsIndex: 0
   instructionsSpeechText:
   - Hi, I am a school girl.
   - You need to collect all five donuts.
   - ' Remember to observe the safety rules as you collect them. '
   - Once you have all 5 donuts go to the building with the green outline.
-  objectivesText: 
+  objectivesText: '- Collect 5 Donuts
+
+    - Make sure you use Road Crossing'
   introSpeechText: []
